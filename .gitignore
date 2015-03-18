@@ -1,0 +1,14 @@
+# Maven generated files #
+#########################
+target
+
+# Eclipse project files #
+#########################
+.project
+.classpath
+.settings
+.attach_pid*
+
+# Netbeans project files #
+##########################
+nb-configuration.xml
