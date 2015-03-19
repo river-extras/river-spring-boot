@@ -4,17 +4,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.apache.river.springframework.boot</groupId>
-  <artifactId>spring-boot-river</artifactId>
+  <artifactId>river-spring-boot</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   
-  <name>Apache River: Spring Boot Extensions</name>
+  <name>Apache River: River Spring Boot</name>
   
   <packaging>pom</packaging>
   
   <modules>
-    <module>spring-boot-bom</module>
-    <module>spring-boot-examples</module>
-    <module>spring-boot-starters</module>
+    <module>river-spring-boot-bom</module>
+    <module>river-spring-boot-samples</module>
+    <module>river-spring-boot-starters</module>
   </modules>
   
   <properties>
@@ -23,11 +23,11 @@
   </properties>
 
   <scm>
-    <connection>scm:git:https://github.com/river-extras/spring-boot-river.git</connection>
-    <developerConnection>scm:git:git@github.com:river-extras/spring-boot-river.git</developerConnection>
-    <url>https://github.com/river-extras/spring-boot-river</url>
+    <connection>scm:git:https://github.com/river-extras/river-spring-boot.git</connection>
+    <developerConnection>scm:git:git@github.com:river-extras/river-spring-boot.git</developerConnection>
+    <url>https://github.com/river-extras/river-spring-boot</url>
   </scm>
 
-  <url>http://river-extras.github.io/spring-boot-river</url>
+  <url>http://river-extras.github.io/river-spring-boot</url>
 
 </project>
