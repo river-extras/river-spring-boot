@@ -15,6 +15,7 @@
     <module>river-spring-boot-bom</module>
     <module>river-spring-boot-samples</module>
     <module>river-spring-boot-starters</module>
+    <module>river-spring-boot-autoconfigure</module>
   </modules>
   
   <properties>

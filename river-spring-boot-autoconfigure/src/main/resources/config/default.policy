@@ -16,24 +16,7 @@
  * limitations under the License.
  */
 
-package com.sun.jini.example.hello;
-
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
-/**
- * Defines a simple remote interface.
- *
- * @author Sun Microsystems, Inc.
- * 
- */
-public interface Hello extends Remote {
-
-    /**
-     * Returns a message string.
-     *
-     * @return message string
-     * @throws RemoteException if a remote communication problem occurs
-     */
-    String sayHello() throws RemoteException;
-}
+/* Default security policy for a non-secure client/server */
+grant {
+    permission java.security.AllPermission;
+};

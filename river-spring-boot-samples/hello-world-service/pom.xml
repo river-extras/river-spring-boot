@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>org.apache.river.springframework.boot</groupId>
     <artifactId>river-spring-boot-samples</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hello-world-client</artifactId>
-  
-  <name>Apache River: River Spring Boot Examples (Hello World Client)</name>
+  <artifactId>hello-world-service</artifactId>
+
+  <name>Apache River: River Spring Boot Examples (Hello World Service)</name>
 
   <packaging>jar</packaging>
 
@@ -26,15 +26,34 @@
       <artifactId>river-spring-boot-starter</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>hello-world-api</includeArtifactIds>
+              <outputDirectory>${project.build.outputDirectory}/lib-dl</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>org.apache.river.springframework.boot.SpringBootClient</mainClass>
+          <mainClass>org.apache.river.springframework.boot.SpringBootService</mainClass>
         </configuration>
         <executions>
           <execution>

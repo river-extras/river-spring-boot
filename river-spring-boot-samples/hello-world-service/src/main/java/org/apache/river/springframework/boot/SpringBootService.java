@@ -13,26 +13,58 @@
  */
 package org.apache.river.springframework.boot;
 
-import org.apache.river.examples.hello.api.Greeter;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.server.ExportException;
 import net.jini.config.Configuration;
 import net.jini.config.ConfigurationException;
-import net.jini.core.lookup.ServiceItem;
-import net.jini.core.lookup.ServiceTemplate;
+import net.jini.core.entry.Entry;
+import net.jini.core.lookup.ServiceID;
 import net.jini.discovery.LookupDiscovery;
-import net.jini.lookup.ServiceDiscoveryManager;
+import net.jini.export.Exporter;
+import net.jini.jeri.BasicILFactory;
+import net.jini.jeri.BasicJeriExporter;
+import net.jini.jeri.tcp.TcpServerEndpoint;
+import net.jini.lookup.JoinManager;
+import net.jini.lookup.entry.Name;
+import org.apache.river.examples.hello.api.Greeter;
+import org.apache.river.examples.hello.impl.GreeterImpl;
+import org.apache.river.lookup.ServiceIDHelper;
 import org.apache.river.springframework.config.SpringBasedConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class SpringBootClient {
+public class SpringBootService {
 
   @Value("${hello-service.groups}")
   String[] groups;
+
+  @Value("${hello-service.name}")
+  String name;
+
+  @Bean
+  GreeterImpl serviceImpl() {
+    return new GreeterImpl();
+  }
+
+  @Bean
+  Exporter serviceExporter() throws UnknownHostException {
+    return new BasicJeriExporter(TcpServerEndpoint.getInstance(String.format("%s.local.", InetAddress.getLocalHost().getHostName()), 0), new BasicILFactory());
+  }
+  
+  @Bean
+  Greeter serviceProxy() throws ExportException, UnknownHostException {
+    return (Greeter) serviceExporter().export(serviceImpl());
+  }
+  
+  @Bean
+  ServiceID serviceId() {
+    return ServiceIDHelper.newServiceID();
+  }
 
   @Bean
   LookupDiscovery lookupDiscovery() throws IOException, ConfigurationException {
@@ -40,8 +72,8 @@ public class SpringBootClient {
   }
 
   @Bean
-  ServiceDiscoveryManager serviceDiscoveryManager() throws IOException, ConfigurationException {
-    return new ServiceDiscoveryManager(lookupDiscovery(), null, config());
+  JoinManager joinManager() throws IOException, ConfigurationException {
+    return new JoinManager(serviceProxy(), new Entry[]{new Name(name)}, serviceId(), lookupDiscovery(), null, config());
   }
 
   @Bean
@@ -51,11 +83,6 @@ public class SpringBootClient {
 
   public static void main(final String[] args) throws Throwable {
 
-    ApplicationContext ctx = SpringApplication.run(SpringBootClient.class, args);
-
-    ServiceDiscoveryManager serviceDiscoveryManager = ctx.getBean("serviceDiscoveryManager", ServiceDiscoveryManager.class);
-    ServiceItem serviceItem = serviceDiscoveryManager.lookup(new ServiceTemplate(null, new Class[]{Greeter.class}, null), null, Long.MAX_VALUE);
-    Greeter server = (Greeter) serviceItem.service;
-    System.out.println("Server says: " + server.sayHello("foo"));
+    SpringApplication.run(SpringBootService.class, args);
   }
 }
